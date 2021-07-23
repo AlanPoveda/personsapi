@@ -25,7 +25,7 @@ public class Person {
     @Column(nullable = false, unique = true)//Campos únicos, não pode repetir
     private String cpf;
 
-    @Column(nullable = false)
+
     private LocalDate birthDate;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}) //Relacionamento com a tablea Phone, ele vai gerar uma tabela intermediária
