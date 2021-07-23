@@ -3,12 +3,14 @@ package com.portifolio.personsapi.service;
 import com.portifolio.personsapi.dto.request.PersonDTO;
 import com.portifolio.personsapi.dto.response.MessageResponseDTO;
 import com.portifolio.personsapi.entity.Person;
+import com.portifolio.personsapi.exception.PersonNotFoundException;
 import com.portifolio.personsapi.mapper.PersonMapper;
 import com.portifolio.personsapi.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -44,4 +46,9 @@ public class PersonService {
                 .collect(Collectors.toList());
     }
 
+    //GET BY ID --------------------------------------------------------------------------------------------------------
+    public Person findById(Long id) throws PersonNotFoundException {
+        Person person  = personRepository.findById(id).orElseThrow(()->new PersonNotFoundException(id));
+        return personMapper.toDTO(person);
+    }
 }
