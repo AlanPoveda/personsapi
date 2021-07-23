@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 //Controlador que vai ser acessado
 @RestController
@@ -30,5 +31,8 @@ public class PersonController {
 
     //GET---------------------------------------------------------------------------------------------------------------
 
-
+    @GetMapping
+    public List<Person> listAll(){
+        return personService.listAll();
+    }
 }

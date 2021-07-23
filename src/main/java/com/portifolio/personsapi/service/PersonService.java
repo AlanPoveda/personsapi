@@ -8,6 +8,9 @@ import com.portifolio.personsapi.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 @Service
 public class PersonService {
@@ -21,7 +24,7 @@ public class PersonService {
         this.personRepository = personRepository;
     }
 
-
+    //Create ----------------------------------------------------------------------------------------------------------
     public MessageResponseDTO createPerson(PersonDTO personDTO){
         //Pegando as informações do Mapper
         Person personToSave = personMapper.toModel(personDTO);
@@ -32,4 +35,13 @@ public class PersonService {
                 .message("Created person with ID" + savedPerson.getId())
                 .build();//Assim você monta a mensagem de forma correta
     }
+
+    //GET ALL ----------------------------------------------------------------------------------------------------------
+    public List<Person> listAll() {
+        List<Person> allPeople = personRepository.findAll();
+        return allPeople.stream()
+                .map(personMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
 }
