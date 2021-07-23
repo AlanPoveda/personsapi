@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -46,9 +47,22 @@ public class PersonService {
                 .collect(Collectors.toList());
     }
 
+    //Criando uma verificação para ser usada no método GET e do DELETE para ver se existe no banco essa pessoa
+
+    private Person verifyIfExists(Long id) throws PersonNotFoundException {
+        return personRepository.findById(id).orElseThrow(()->new PersonNotFoundException(id));
+
+    }
+
     //GET BY ID --------------------------------------------------------------------------------------------------------
     public Person findById(Long id) throws PersonNotFoundException {
-        Person person  = personRepository.findById(id).orElseThrow(()->new PersonNotFoundException(id));
+        Person person = verifyIfExists(id);
         return personMapper.toDTO(person);
+    }
+
+    //DELETE -----------------------------------------------------------------------------------------------------------
+    public void delete(Long id) throws PersonNotFoundException {
+        verifyIfExists(id);
+        personRepository.deleteById(id);
     }
 }
