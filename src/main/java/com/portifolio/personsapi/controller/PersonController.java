@@ -1,11 +1,14 @@
 package com.portifolio.personsapi.controller;
 
+import com.portifolio.personsapi.dto.request.PersonDTO;
 import com.portifolio.personsapi.dto.response.MessageResponseDTO;
 import com.portifolio.personsapi.entity.Person;
 import com.portifolio.personsapi.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 //Controlador que vai ser acessado
 @RestController
@@ -21,8 +24,8 @@ public class PersonController {
     }
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED) // Codigo create, http, feito pelo própro spring
-    public MessageResponseDTO createPerson(@RequestBody Person person){
-        return personService.createPerson(person);
+    public MessageResponseDTO createPerson(@RequestBody @Valid PersonDTO personDTO){
+        return personService.createPerson(personDTO);
     }
 
     //GET---------------------------------------------------------------------------------------------------------------
