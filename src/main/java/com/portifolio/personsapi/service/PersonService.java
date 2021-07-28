@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -33,10 +31,7 @@ public class PersonService {
         Person personToSave = personMapper.toModel(personDTO);
 
         Person savedPerson = personRepository.save(personToSave); //Save para salvar o objeto no banco
-        return MessageResponseDTO
-                .builder()
-                .message("Created person with ID" + savedPerson.getId())
-                .build();//Assim você monta a mensagem de forma correta
+        return createMessageResponse(savedPerson.getId(), "Created person with ID");//Assim você monta a mensagem de forma correta
     }
 
     //GET ALL ----------------------------------------------------------------------------------------------------------
@@ -45,13 +40,6 @@ public class PersonService {
         return allPeople.stream()
                 .map(personMapper::toDTO)
                 .collect(Collectors.toList());
-    }
-
-    //Criando uma verificação para ser usada no método GET e do DELETE para ver se existe no banco essa pessoa
-
-    private Person verifyIfExists(Long id) throws PersonNotFoundException {
-        return personRepository.findById(id).orElseThrow(()->new PersonNotFoundException(id));
-
     }
 
     //GET BY ID --------------------------------------------------------------------------------------------------------
@@ -65,4 +53,33 @@ public class PersonService {
         verifyIfExists(id);
         personRepository.deleteById(id);
     }
+
+    //UPDATE------------------------------------------------------------------------------------------------------------
+
+    public MessageResponseDTO updateById(Long id, PersonDTO personDTO) throws PersonNotFoundException {
+        verifyIfExists(id);
+
+        //Pegando as informações do Mapper
+        Person personToUpdate = personMapper.toModel(personDTO);
+
+        Person updatePerson = personRepository.save(personToUpdate); //Save para salvar o objeto no banco
+        return createMessageResponse(updatePerson.getId(), "Updated person with ID");//Assim você monta a mensagem de forma correta
+    }
+
+    //MÉTODOS PRIVADOS ABAIXO DOS PÚBLICOS -----------------------------------------------------------------------------
+
+    //Message Response
+    private MessageResponseDTO createMessageResponse(Long id, String message) {
+        return MessageResponseDTO
+                .builder()
+                .message(message + id)
+                .build();
+    }
+
+    //Criando uma verificação para ser usada no método GET e do DELETE para ver se existe no banco essa pessoa
+    private Person verifyIfExists(Long id) throws PersonNotFoundException {
+        return personRepository.findById(id).orElseThrow(()->new PersonNotFoundException(id));
+
+    }
+
 }
