@@ -6,6 +6,7 @@ import com.portifolio.personsapi.entity.Person;
 import com.portifolio.personsapi.exception.PersonNotFoundException;
 import com.portifolio.personsapi.mapper.PersonMapper;
 import com.portifolio.personsapi.repository.PersonRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,16 +15,11 @@ import java.util.stream.Collectors;
 
 
 @Service
+@AllArgsConstructor(onConstructor = @__(@Autowired))
 public class PersonService {
     private PersonRepository personRepository; //Pegando a interface com JPA
 
     private final PersonMapper personMapper = PersonMapper.INSTANCE; // Pegando o Mapper
-
-    //Fazer injeção do objeto dentro de um construtor, a vantagem é para fazer testes unitários
-    @Autowired
-    public PersonService(PersonRepository personRepository){
-        this.personRepository = personRepository;
-    }
 
     //Create ----------------------------------------------------------------------------------------------------------
     public MessageResponseDTO createPerson(PersonDTO personDTO){
